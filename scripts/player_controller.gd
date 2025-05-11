@@ -107,6 +107,7 @@ func box_select_units():
 				, box_start.y + selection_box.size.y
 			):
 			selected_units.append(unit)
+			unit.order_select()
 
 func within_bounds(test_position, lower_x_bound, upper_x_bound, lower_y_bound, upper_y_bound):
 	print(get_global_mouse_position())
