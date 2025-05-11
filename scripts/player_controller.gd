@@ -32,7 +32,7 @@ func _process(delta):
 	handle_movement(delta)
 	apply_zoom(delta)
 	update_selection_box()
-	
+
 func handle_movement(delta):
 	var input_vector = Vector2.ZERO
 	if Input.is_action_pressed("ui_right"):
@@ -106,12 +106,12 @@ func box_select_units():
 				, box_start.y
 				, box_start.y + selection_box.size.y
 			):
-			selected_units.append(unit)
-			unit.order_select()
+			print(team)
+			if unit.team == team:
+				selected_units.append(unit)
+				unit.order_select()
 
 func within_bounds(test_position, lower_x_bound, upper_x_bound, lower_y_bound, upper_y_bound):
-	print(get_global_mouse_position())
-	
 	if (
 		test_position.x > lower_x_bound 
 		and test_position.x <= upper_x_bound 
@@ -148,5 +148,5 @@ func update_selection_box():
 		selection_box.position.y += rect_size.y
 		selection_box.size.y = abs(rect_size.y)
 
-func assign_controllable_units(units: Array):
-	controllable_units = units
+func set_team(value: String):
+	team = value

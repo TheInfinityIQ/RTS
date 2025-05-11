@@ -4,6 +4,9 @@ var players = []
 var units: Array = []
 var teams = {}
 
+var player_team
+var ai_team
+
 func get_unit_sprite_file_name(unit: CharacterBody2D):
 	var path = unit.get_child(2).texture.resource_path
 	return path.split('/')[path.split('/').size() - 1].split('.')[0]
@@ -36,17 +39,12 @@ func get_players():
 	for node in nodes:
 		if node.name == "PlayerController":
 			players.append(node)
-			
-	print(players)
 
 func assign_teams_to_players():
 	var index = 0
 	
 	for team in teams:
-		if index + 1 > players.size():
-			players[index].assign_controllable_units(team)
-			index += 1
-		else: 
+		players[index].set_team(team)
+		
+		if index + 1 == players.size():
 			break
-	
-	print(teams)
