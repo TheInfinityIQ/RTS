@@ -44,6 +44,7 @@ func assign_teams_to_players():
 	var index = 0
 	
 	for team in teams:
+		player_team = team
 		players[index].set_team(team)
 		
 		if index + 1 == players.size():

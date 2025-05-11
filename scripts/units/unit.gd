@@ -18,6 +18,8 @@ var is_selected: bool = false
 var is_moving: bool = false
 var target_move_position: Vector2
 
+var world
+
 func set_team(team_assignment: String):
 	team = team_assignment
 	
@@ -31,6 +33,8 @@ func _ready():
 	attack_cooldown_timer = 0
 
 	is_ready_to_attack = false
+	
+	world = get_parent().get_parent()
 	
 	create_health_bar()
 	
@@ -60,13 +64,12 @@ func _on_area_2d_body_entered(body):
 	var node = get_parent().find_child(body.name, false)
 	if node.name != self.name:
 		units_in_attack_range.append(body)
-		print("BAD GUY!")
 
 func _on_area_2d_body_exited(body):
 	units_in_attack_range = []
-	print("BYE BYE!")
 
 func order_select():
+	if team == world.player_team:
 		is_selected = true
 
 func order_to_move(target_position: Vector2):
@@ -88,6 +91,8 @@ func order_stop_move():
 func action_move():
 	if target_move_position != Vector2.ZERO:
 		move_and_slide()
+		if get_slide_collision_count():
+			order_stop_move()
 		
 		if global_position.distance_to(target_move_position) < 5:
 			order_stop_move()
@@ -118,6 +123,7 @@ func apply_damage():
 func create_health_bar():
 	health_node = ColorRect.new()
 	
+	# Will overlap with some unit sprite if not set
 	health_node.set_z_index(998)
 	
 	health_node.size.x = health
@@ -128,3 +134,8 @@ func create_health_bar():
 	health_node.position.x -= 50
 	
 	add_child(health_node)
+
+
+func on_unit_touched(body):
+	print(body)
+	pass # Replace with function body.
