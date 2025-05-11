@@ -14,15 +14,18 @@ var rng = RandomNumberGenerator.new()
 
 var enemies_in_range = []
 
-var selected: bool = false
-var moving: bool = false
-var target_position: Vector2
+var is_selected: bool = false
+var is_moving: bool = false
+var target_move_position: Vector2
 var direction: Vector2 = Vector2.ZERO
+
+func get_file_name(path: String):
+	return path.split('/')[path.split('/').size() - 1].split('.')[0]
 
 func _ready():
 	health = 100
 	damage = 15
-	team = get_parent().get_child(0).name == self.name
+	team = get_file_name(get_child(2).texture.resource_path)
 	attack_cooldown = rng.randi_range(30, 60)
 	attack_cooldown_timer = 0
 
@@ -39,69 +42,41 @@ func _ready():
 	
 	add_child(health_node)
 	
-	# Enable collision to detect clicks
 	input_pickable = true
 
-func apply_damage():
-	health -= 20
-	health_node.size.x -= 20
-	
-	if health <= 0:
-		queue_free()
-
-# When clicking on of character
 func _on_input_event(viewport, event, shape_idx):
 	if (
 		event is InputEventMouseButton 
 		and event.button_index == MOUSE_BUTTON_LEFT 
 		and event.pressed
 		):
-			selected = true
+			is_selected = true
 
-# When clicking off of character
 func _unhandled_input(event):
 	if (
 		event is InputEventMouseButton 
 		and event.button_index == MOUSE_BUTTON_LEFT 
 		and event.pressed
 		):
-			if selected:
-				target_position = get_global_mouse_position()
-				
-				print("Global {location}".format({"location": global_position}))
-				print("New {location}".format({"location": target_position}))
-				
-				print("Unit moving!")
-				moving = true
-				
-				direction = global_position.direction_to(target_position)
-				velocity = direction * move_speed
-				
-				selected = false
+			order_to_move(get_global_mouse_position())
 
 func _physics_process(delta):
-	if target_position != Vector2.ZERO:
+	if target_move_position != Vector2.ZERO:
 		move_and_slide()
 		
-		if global_position.distance_to(target_position) < 5:
-			target_position = Vector2.ZERO
+		if global_position.distance_to(target_move_position) < 5:
+			target_move_position = Vector2.ZERO
 			velocity = Vector2.ZERO
 			
 	if enemies_in_range.size():
 		if is_ready_to_attack: 
-			attack()
+			action_attack()
 		else:
 			attack_cooldown_timer += 1
-			print(attack_cooldown_timer)
 			
 			if attack_cooldown_timer == attack_cooldown:
 				is_ready_to_attack = true
 				attack_cooldown_timer = 0
-
-func attack():
-	print("TAKE YER")
-	get_parent().find_child(enemies_in_range[0], false).apply_damage()
-	is_ready_to_attack = false
 
 func _on_area_2d_body_entered(body):
 	var node = get_parent().find_child(body.name, false)
@@ -112,4 +87,46 @@ func _on_area_2d_body_entered(body):
 func _on_area_2d_body_exited(body):
 	enemies_in_range = []
 	print("BYE BYE!")
-	pass # Replace with function body.
+
+func order_select():
+		is_selected = true
+
+func order_to_move(target_position: Vector2):
+	if not is_selected:
+		return
+	
+	target_move_position = target_position
+	
+	print("Global {location}".format({"location": global_position}))
+	print("New {location}".format({"location": target_position}))
+	
+	print("Unit is_moving!")
+	is_moving = true
+	
+	direction = global_position.direction_to(target_position)
+	velocity = direction * move_speed
+	
+	is_selected = false
+
+func order_stop_move():
+	target_move_position = Vector2.ZERO
+	velocity = Vector2.ZERO
+
+func action_move():
+	if target_move_position != Vector2.ZERO:
+		move_and_slide()
+		
+		if global_position.distance_to(target_move_position) < 5:
+			order_stop_move()
+
+func action_attack():
+	print("TAKE YER")
+	get_parent().find_child(enemies_in_range[0], false).apply_damage()
+	is_ready_to_attack = false
+
+func apply_damage():
+	health -= 20
+	health_node.size.x -= 20
+	
+	if health <= 0:
+		queue_free()

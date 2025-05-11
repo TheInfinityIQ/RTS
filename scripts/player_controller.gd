@@ -17,6 +17,10 @@ var selected_units = []
 
 var world: Node2D
 
+# Game Variabels
+var team: String
+var controllable_units = []
+
 func _ready():
 	camera = $Camera2D  # Cache the Camera2D node
 	camera.zoom = Vector2(1, 1)  # Start at default zoom (1x)
@@ -81,11 +85,11 @@ func handle_box_select(event):
 			add_child(selection_box)
 		else:
 			is_selecting = false
-			select_units()
+			box_select_units()
 			selection_box.queue_free()
 			selection_box = null
 
-func select_units():
+func box_select_units():
 	var units = world.get_child(1).get_children()
 	
 	# Offset due to box being draw with relative_mouse_pos to PlayerController pos
@@ -142,3 +146,6 @@ func update_selection_box():
 	if rect_size.y < 0:
 		selection_box.position.y += rect_size.y
 		selection_box.size.y = abs(rect_size.y)
+
+func assign_controllable_units(units: Array):
+	controllable_units = units
