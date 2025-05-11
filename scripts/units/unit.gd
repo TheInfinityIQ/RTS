@@ -12,7 +12,7 @@ var is_ready_to_attack
 
 var rng = RandomNumberGenerator.new()
 
-var enemies_in_range = []
+var units_in_attack_range = []
 
 var is_selected: bool = false
 var is_moving: bool = false
@@ -59,11 +59,11 @@ func _physics_process(delta):
 func _on_area_2d_body_entered(body):
 	var node = get_parent().find_child(body.name, false)
 	if node.name != self.name:
-		enemies_in_range.append(body.name)
+		units_in_attack_range.append(body)
 		print("BAD GUY!")
 
 func _on_area_2d_body_exited(body):
-	enemies_in_range = []
+	units_in_attack_range = []
 	print("BYE BYE!")
 
 func order_select():
@@ -93,18 +93,19 @@ func action_move():
 			order_stop_move()
 
 func action_detect_enemy():
-	if enemies_in_range.size():
-		if is_ready_to_attack: 
-			action_attack()
-		else:
-			attack_cooldown_timer += 1
-			
-			if attack_cooldown_timer == attack_cooldown:
-				is_ready_to_attack = true
-				attack_cooldown_timer = 0
+	for unit in units_in_attack_range:
+		if unit.team != team:
+			if is_ready_to_attack: 
+				action_attack(unit)
+			else:
+				attack_cooldown_timer += 1
+				
+				if attack_cooldown_timer == attack_cooldown:
+					is_ready_to_attack = true
+					attack_cooldown_timer = 0
 
-func action_attack():
-	get_parent().find_child(enemies_in_range[0], false).apply_damage()
+func action_attack(enemy_to_attack):
+	enemy_to_attack.apply_damage()
 	is_ready_to_attack = false
 
 func apply_damage():
@@ -116,6 +117,8 @@ func apply_damage():
 
 func create_health_bar():
 	health_node = ColorRect.new()
+	
+	health_node.set_z_index(998)
 	
 	health_node.size.x = health
 	health_node.size.y = 25
