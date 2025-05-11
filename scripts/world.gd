@@ -4,7 +4,8 @@ var players = []
 var units: Array = []
 var teams = {}
 
-func get_file_name(path: String):
+func get_unit_sprite_file_name(unit: CharacterBody2D):
+	var path = unit.get_child(2).texture.resource_path
 	return path.split('/')[path.split('/').size() - 1].split('.')[0]
 
 func _ready():
@@ -16,14 +17,19 @@ func _ready():
 
 func get_units():
 	for child in get_child(1).get_children():
-		units.append(child.get_child(2))
+		units.append(child)
 
 func get_teams():
+	var team_name
+	
 	for unit in units:
-		if get_file_name(unit.texture.resource_path) in teams:
-			teams[get_file_name(unit.texture.resource_path)].append(unit)
+		team_name = get_unit_sprite_file_name(unit)
+		unit.set_team(team_name)
+		
+		if team_name in teams:
+			teams[team_name].append(unit)
 		else:
-			teams[get_file_name(unit.texture.resource_path)] = [unit]
+			teams[team_name] = [unit]
 
 func get_players():
 	var nodes = get_parent().get_children()
