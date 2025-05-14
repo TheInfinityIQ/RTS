@@ -1,13 +1,14 @@
 extends Node2D
 
-@export var move_speed := 500.0    # Movement speed (pixels per second)
-@export var zoom_step := 0.1        # How much to zoom in/out per wheel tick
-@export var max_zoom_in := 0.5      # Maximum zoom-in (smallest scale)
-@export var max_zoom_out := 2.0     # Maximum zoom-out (largest scale)
-@export var zoom_speed := 50  # How quickly to interpolate towards zoom target
+var move_speed := 2500
+var zoom_step := 0.1
+var max_zoom_in := 0.5
+var max_zoom_out := 50
+var zoom_speed := 250
 
 var target_zoom = Vector2.ZERO
 var camera: Camera2D
+var camera_speed_mod = 1
 
 # Box Selection Variables
 var selection_start_point = Vector2.ZERO
@@ -43,7 +44,7 @@ func handle_movement(delta):
 		input_vector.y += 1
 	if Input.is_action_pressed("ui_up"):
 		input_vector.y -= 1
-
+		
 	if input_vector != Vector2.ZERO:
 		input_vector = input_vector.normalized()
 		position += input_vector * move_speed * delta
@@ -65,10 +66,7 @@ func handle_zoom(event):
 		calculate_zoom(-zoom_step)
 
 func calculate_zoom(amount: float):
-	var new_zoom := camera.zoom + Vector2(amount, amount)
-	new_zoom.x = clamp(new_zoom.x, max_zoom_in, max_zoom_out)
-	new_zoom.y = clamp(new_zoom.y, max_zoom_in, max_zoom_out)
-	target_zoom = new_zoom
+	target_zoom = camera.zoom + Vector2(amount, amount)
 
 func handle_box_select(event):
 	if event.button_index == MOUSE_BUTTON_LEFT:

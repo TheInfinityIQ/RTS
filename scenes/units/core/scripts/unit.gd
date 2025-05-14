@@ -1,30 +1,9 @@
 extends CharacterBody2D
 
-@export var move_speed := 100.0
-
-var health
-var health_node
-var damage
 var team
-var attack_cooldown
-var attack_cooldown_timer
-var is_ready_to_attack
-
 var rng = RandomNumberGenerator.new()
-
-var units_in_attack_range = []
-
 var is_selected: bool = false
-var is_moving: bool = false
-var target_move_position: Vector2
-
 var world
-
-func set_team(team_assignment: String):
-	team = team_assignment
-	
-func set_is_moving(value: bool):
-	is_moving = value
 
 func _ready():
 	health = 100
@@ -60,17 +39,34 @@ func _physics_process(delta):
 	action_move()
 	action_detect_enemy()
 
-func _on_area_2d_body_entered(body):
-	var node = get_parent().find_child(body.name, false)
-	if node.name != self.name:
-		units_in_attack_range.append(body)
-
-func _on_area_2d_body_exited(body):
-	units_in_attack_range = []
+func set_team(team_assignment: String):
+	team = team_assignment
 
 func order_select():
 	if team == world.player_team:
 		is_selected = true
+		
+func action_detect_enemy():
+	for unit in units_in_attack_range:
+		if unit.team != team:
+			if is_ready_to_attack: 
+				action_attack(unit)
+			else:
+				attack_cooldown_timer += 1
+				
+				if attack_cooldown_timer == attack_cooldown:
+					is_ready_to_attack = true
+					attack_cooldown_timer = 0
+
+
+
+
+
+var move_speed := 100.0
+var is_moving: bool = false
+var target_move_position: Vector2
+func set_is_moving(value: bool):
+	is_moving = value
 
 func order_to_move(target_position: Vector2):
 	if not is_selected:
@@ -87,7 +83,7 @@ func order_to_move(target_position: Vector2):
 func order_stop_move():
 	target_move_position = Vector2.ZERO
 	set_velocity(Vector2.ZERO)
-
+	
 func action_move():
 	if target_move_position != Vector2.ZERO:
 		move_and_slide()
@@ -97,28 +93,12 @@ func action_move():
 		if global_position.distance_to(target_move_position) < 5:
 			order_stop_move()
 
-func action_detect_enemy():
-	for unit in units_in_attack_range:
-		if unit.team != team:
-			if is_ready_to_attack: 
-				action_attack(unit)
-			else:
-				attack_cooldown_timer += 1
-				
-				if attack_cooldown_timer == attack_cooldown:
-					is_ready_to_attack = true
-					attack_cooldown_timer = 0
 
-func action_attack(enemy_to_attack):
-	enemy_to_attack.apply_damage()
-	is_ready_to_attack = false
 
-func apply_damage():
-	health -= 20
-	health_node.size.x -= 20
-	
-	if health <= 0:
-		queue_free()
+
+
+var health
+var health_node
 
 func create_health_bar():
 	health_node = ColorRect.new()
@@ -135,7 +115,28 @@ func create_health_bar():
 	
 	add_child(health_node)
 
+func apply_damage():
+	health -= 20
+	health_node.size.x -= 20
+	
+	if health <= 0:
+		queue_free()
 
-func on_unit_touched(body):
-	print(body)
-	pass # Replace with function body.
+var damage
+
+func _on_attack_area_entered(body):
+	var node = get_parent().find_child(body.name, false)
+	if node.name != self.name:
+		units_in_attack_range.append(body)
+
+func _on_attack_area_exited(body):
+	units_in_attack_range = []
+
+var attack_cooldown
+var attack_cooldown_timer
+var is_ready_to_attack
+var units_in_attack_range = []
+
+func action_attack(enemy_to_attack):
+	enemy_to_attack.apply_damage()
+	is_ready_to_attack = false
