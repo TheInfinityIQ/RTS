@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cdqky820vv7kb" path="res://scenes/levels/scripts/world.gd" id="1_efo0y"]
 [ext_resource type="TileSet" uid="uid://ddpn87balvxc2" path="res://assets/world/tiles/tileset_grassland.tres" id="2_ps7a7"]
-[ext_resource type="PackedScene" uid="uid://biloeogthxhd7" path="res://scenes/units/melee/Test.tscn" id="3_hgrs2"]
+[ext_resource type="PackedScene" uid="uid://dup43q0bpyywt" path="res://scenes/units/melee/Warrior.tscn" id="3_ps7a7"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_efo0y")
@@ -13,4 +13,4 @@ tile_set = ExtResource("2_ps7a7")
 
 [node name="Units" type="Node2D" parent="."]
 
-[node name="Test" parent="Units" instance=ExtResource("3_hgrs2")]
+[node name="Warrior" parent="Units" instance=ExtResource("3_ps7a7")]

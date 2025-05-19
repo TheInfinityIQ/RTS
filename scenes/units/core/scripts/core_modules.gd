@@ -1,26 +1,22 @@
 extends Node
+class_name CoreModules
 
-var modules
+var node_attack: AttackModule
+var node_health: HealthModule
+var node_movement: MovementModule
+var config: CoreModulesConfig
 
 func _ready():
-	get_modules()
+	setup_modules()
 
-func get_modules():
-	modules = {
-		"attack": get_node("Attack"),
-		"health": get_node("Health"),
-		"movement": get_node("Movement")
-	}
-	print(modules)
+func init(new_config: CoreModulesConfig):
+	config = new_config.duplicate(true)
+	
+	node_attack.init(config.attack)
+	node_health.init(config.health)
+	node_movement.init(config.movement)
 
-func init_modules(config: Object):
-	modules["attack"].init(config["attack"])
-	modules["health"].init(config["health"])
-	modules["movement"].init(config["movement"])
-
-func get_config():
-	return {
-		"attack": modules["attack"].get_config(),
-		"health": modules["health"].get_config(),
-		"movement": modules["movement"].get_config()
-	}
+func setup_modules():
+	node_attack = get_node("Attack")
+	node_health = get_node("Health")
+	node_movement = get_node("Movement")
