@@ -2,7 +2,6 @@ extends CharacterBody2D
 class_name Actor
 
 var _node_unit: Node2D
-var _node_sprite: Sprite2D
 
 var attack_config: AttackConfig
 var health_config: HealthConfig
@@ -46,9 +45,9 @@ func init(new_attack_config: AttackConfig, new_movement_config: MovementConfig, 
 	attack_config = new_attack_config
 	movement_config = new_movement_config
 	health_config = new_health_config
-	_node_sprite = get_node("Sprite2D")
-	_node_sprite.texture.resource_path = texture_path
 	
+	get_node("Sprite2D").texture.resource_path = texture_path
+
 func select():
 	is_selected = true
 	print("SELECTED!")
