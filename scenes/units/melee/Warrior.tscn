@@ -1,13 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dup43q0bpyywt"]
+[gd_scene load_steps=3 format=3 uid="uid://dup43q0bpyywt"]
 
 [ext_resource type="Script" uid="uid://daunxxymm52l5" path="res://scenes/units/melee/scripts/warrior_unit.gd" id="1_o68gy"]
 [ext_resource type="PackedScene" uid="uid://c86543dp4f1iw" path="res://scenes/units/components/Actor.tscn" id="1_rn86l"]
-[ext_resource type="Texture2D" uid="uid://qn6di67r72kl" path="res://assets/units/avatars/fntcr_03.PNG" id="3_g75p2"]
 
 [node name="Warrior" type="Node2D"]
 script = ExtResource("1_o68gy")
 
 [node name="Actor" parent="." instance=ExtResource("1_rn86l")]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("3_g75p2")

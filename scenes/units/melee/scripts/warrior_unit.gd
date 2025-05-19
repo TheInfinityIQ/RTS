@@ -8,12 +8,12 @@ func _ready():
 	var movement_config: MovementConfig = MovementConfig.new()
 	var health_config: HealthConfig = HealthConfig.new()
 	
-	attack_config.attack.damage = 25
-	attack_config.attack.max_range = 50
-	attack_config.attack.attack_cooldown = 5
+	attack_config.damage = 25
+	attack_config.max_range = 50
+	attack_config.attack_cooldown = 5
 	
-	health_config.health.total_hitpoints = 250
+	health_config.total_hitpoints = 250
 	
-	movement_config.movement.movement_speed = 5
+	movement_config.movement_speed = 1000
 	
-	actor.init(attack_config, movement_config, health_config)
+	actor.init(attack_config, movement_config, health_config, "res://assets/units/avatars/fntcr_03.PNG")
