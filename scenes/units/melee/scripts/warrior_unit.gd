@@ -4,14 +4,16 @@ var actor: Actor
 
 func _ready():
 	actor = get_node("Actor")
-	var core_config: CoreModulesConfig = CoreModulesConfig.new()
+	var attack_config: AttackConfig = AttackConfig.new()
+	var movement_config: MovementConfig = MovementConfig.new()
+	var health_config: HealthConfig = HealthConfig.new()
 	
-	core_config.attack.damage = 25
-	core_config.attack.max_range = 50
-	core_config.attack.attack_cooldown = 5
+	attack_config.attack.damage = 25
+	attack_config.attack.max_range = 50
+	attack_config.attack.attack_cooldown = 5
 	
-	core_config.health.total_hitpoints = 250
+	health_config.health.total_hitpoints = 250
 	
-	core_config.movement.movement_speed = 5
+	movement_config.movement.movement_speed = 5
 	
-	actor.init_core(core_config)
+	actor.init(attack_config, movement_config, health_config)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://swjplv3fylh8"]
 
-[ext_resource type="Script" uid="uid://b0lyswd22w516" path="res://scenes/units/modules/scripts/attack_module.gd" id="1_4fuaw"]
+[ext_resource type="Script" uid="uid://b0lyswd22w516" path="res://scenes/units/components/scripts/attack_module.gd" id="1_4fuaw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_if441"]
 
