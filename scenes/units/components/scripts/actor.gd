@@ -20,7 +20,12 @@ func _update_move():
 	if not is_moving:
 		return
 	
-	MovementModule.calculate_move(global_position, target_move_position, self, movement_config.movement_speed)
+	MovementModule.calculate_move(
+		global_position, 
+		target_move_position, 
+		self, 
+		movement_config.movement_speed
+	)
 
 func _set_target_move_position(target_position: Vector2):
 	if not is_selected:

@@ -4,7 +4,7 @@ class_name MovementModule
 static func calculate_move(current_position: Vector2, target_position: Vector2, actor: CharacterBody2D, movement_speed: float):
 	if (
 			actor.get_slide_collision_count()
-			or current_position.distance_to(target_position) < 5
+			or current_position.distance_to(target_position) < 15
 		):
 			actor.set_velocity(Vector2.ZERO)
 			return
