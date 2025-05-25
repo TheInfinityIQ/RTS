@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dup43q0bpyywt"]
 
 [ext_resource type="Script" uid="uid://daunxxymm52l5" path="res://scenes/units/melee/scripts/warrior_unit.gd" id="1_o68gy"]
-[ext_resource type="PackedScene" uid="uid://c86543dp4f1iw" path="res://scenes/units/components/Actor.tscn" id="1_rn86l"]
+[ext_resource type="PackedScene" uid="uid://c86543dp4f1iw" path="res://scenes/units/core/Actor.tscn" id="1_rn86l"]
 
 [node name="Warrior" type="Node2D"]
 script = ExtResource("1_o68gy")
