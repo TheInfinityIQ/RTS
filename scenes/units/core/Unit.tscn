@@ -19,5 +19,7 @@ monitorable = false
 shape = SubResource("CircleShape2D_l4hxg")
 disabled = true
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_body_exited"]

@@ -1,51 +1,22 @@
 extends Node
 
-#var players = []
-#var units: Array = []
-#var teams = {}
-#
-#var player_team
-#var ai_team
-#
-#func get_unit_sprite_file_name(unit: CharacterBody2D):
-	#var path = unit.get_child(2).texture.resource_path
-	#return path.split('/')[path.split('/').size() - 1].split('.')[0]
-#
-#func _ready():
-	#get_units()
-	#get_teams()
-	#get_players()
-	#
-	#assign_teams_to_players()
-#
-#func get_units():
-	#for child in get_child(1).get_children():
-		#units.append(child)
-#
-#func get_teams():
-	#var team_name
-	#
-	#for unit in units:
-		#team_name = get_unit_sprite_file_name(unit)
-		#unit.set_team(team_name)
-		#
-		#if team_name in teams:
-			#teams[team_name].append(unit)
-		#else:
-			#teams[team_name] = [unit]
-#
-#func get_players():
-	#var nodes = get_parent().get_children()
-	#for node in nodes:
-		#if node.name == "PlayerController":
-			#players.append(node)
-#
-#func assign_teams_to_players():
-	#var index = 0
-	#
-	#for team in teams:
-		#player_team = team
-		#players[index].set_team(team)
-		#
-		#if index + 1 == players.size():
-			#break
+var players: Array[PlayerController] = []
+var pre_fabbed_units: Array[int] = [UnitType.InfantryWarrior]
+
+func _ready():
+	players.append(get_parent().get_node("PlayerController"))
+	
+	var unit_id: int = 1
+	var fabbed_unit: Unit
+	
+	for player in players:
+		var position: Vector2 = Vector2.ZERO
+		
+		for pre_fabbed_unit in pre_fabbed_units:
+			fabbed_unit = FactoryUnit.build(pre_fabbed_unit, position, unit_id, player.team)
+			player.controllable_units.append(fabbed_unit)
+			
+			unit_id += 1
+			position.x += fabbed_unit.scale.x + 250 # two-fifty seems like a good space between units
+			
+			get_node("Units").add_child(fabbed_unit)

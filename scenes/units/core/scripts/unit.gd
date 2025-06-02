@@ -1,13 +1,21 @@
 extends CharacterBody2D
 class_name Unit
 
+# -----------------------
+# ----- Identifiers -----
+# -----------------------
+var id: int
+var team: String
+
+# ------------------------
+# ----- Configurable ----- 
+# ------------------------
 var attack_behaviour: AttackBehaviour
 var movement_behaviour: MovementBehaviour
 var health_behaviour: HealthBehaviour
 var detect_behaviour: DetectBehaviour
 
 var health_total: float
-var health_current: float
 
 var attack_max_range: float
 var attack_min_range: float
@@ -15,13 +23,16 @@ var attack_cooldown: float
 var attack_damage: float
 
 var movement_speed: float
-var movement_target_position: Vector2
+var sprite_path: String
 
-var id: int
-var is_selected: bool
-var is_moving: bool
-var enemies_in_range: Dictionary[int, Unit]
-var team: String
+# -------------------
+# ----- Dynamic -----
+# -------------------
+var is_selected: bool = false
+var is_moving: bool = false
+var enemies_in_range: Dictionary[int, Unit] = {}
+var movement_target_position: Vector2 = Vector2.ZERO
+var health_current: float
 
 func select():
 	is_selected = true

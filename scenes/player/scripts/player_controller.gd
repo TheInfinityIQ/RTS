@@ -1,4 +1,5 @@
 extends Node2D
+class_name PlayerController
 
 var move_speed := 2500
 var zoom_step := 0.1
@@ -17,17 +18,19 @@ var is_selecting = false
 var selected_units = []
 
 var world: Node2D
+var world_units: Node2D
 
 # Game Variabels
 var team: String
-var controllable_units = []
+var controllable_units: Array[Unit] = []
 
 func _ready():
 	camera = $Camera2D  # Cache the Camera2D node
 	camera.zoom = Vector2(1, 1)  # Start at default zoom (1x)
 	target_zoom = camera.zoom
 	
-	world = get_parent().get_child(0)
+	world = get_parent().get_node("World")
+	world_units = world.get_node("Units")
 
 func _process(delta):
 	handle_movement(delta)
@@ -88,15 +91,13 @@ func handle_box_select(event):
 			selection_box = null
 
 func box_select_units():
-	var units = world.get_child(1).get_children()
-	
 	# Offset due to box being draw with relative_mouse_pos to PlayerController pos
 	var box_start: Vector2 = Vector2.ZERO
 	var mouse_pos = get_global_mouse_position()
 	box_start.x = mouse_pos.x - selection_box.size.x
 	box_start.y = mouse_pos.y - selection_box.size.y
 	
-	for unit in units: 
+	for unit in world_units.get_children(): 
 		if within_bounds(
 				unit.position
 				, box_start.x
