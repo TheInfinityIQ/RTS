@@ -1,17 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://0urjsmog0dge"]
 
 [ext_resource type="Script" uid="uid://eseatytulpus" path="res://scenes/units/core/scripts/unit.gd" id="1_ml35x"]
+[ext_resource type="Texture2D" uid="uid://dyfojqxavj1ft" path="res://assets/units/avatars/04.png" id="2_gmvmi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gmvmi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_l4hxg"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ml35x"]
-
 [node name="Unit" type="CharacterBody2D"]
+input_pickable = true
 script = ExtResource("1_ml35x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(25, 25)
 shape = SubResource("CircleShape2D_gmvmi")
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -22,7 +23,7 @@ shape = SubResource("CircleShape2D_l4hxg")
 disabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("PlaceholderTexture2D_ml35x")
+texture = ExtResource("2_gmvmi")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_body_exited"]

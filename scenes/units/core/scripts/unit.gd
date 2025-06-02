@@ -35,16 +35,18 @@ var movement_target_position: Vector2 = Vector2.ZERO
 var health_current: float
 
 func select():
+	print("Selected")
 	is_selected = true
 
 func deselect():
+	print("Deselected")
 	is_selected = false
 
-func _process(delta: float) -> void:
+func _process(delta: float):
 	attack_behaviour.attack(self)
 	movement_behaviour.move(self)
 
-func _on_input_event(viewport, event, shape_idx):
+func _input_event(viewport, event, shape_idx):
 	if (
 		event is InputEventMouseButton 
 		and event.button_index == MOUSE_BUTTON_LEFT 
@@ -61,7 +63,7 @@ func _unhandled_input(event):
 				return
 			
 			if event.button_index == MOUSE_BUTTON_LEFT:
-				is_selected = false
+				deselect()
 				return
 			
 			if event.button_index == MOUSE_BUTTON_RIGHT:

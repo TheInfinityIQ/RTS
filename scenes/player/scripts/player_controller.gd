@@ -105,10 +105,9 @@ func box_select_units():
 				, box_start.y
 				, box_start.y + selection_box.size.y
 			):
-			print(team)
 			if unit.team == team:
 				selected_units.append(unit)
-				unit.order_select()
+				unit.select()
 
 func within_bounds(test_position, lower_x_bound, upper_x_bound, lower_y_bound, upper_y_bound):
 	if (
